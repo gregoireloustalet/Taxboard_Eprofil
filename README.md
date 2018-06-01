@@ -23,7 +23,7 @@ L'objectif du e-profil est de créer un framework pour les legaltech, afin qu'el
 
 **Standard Code:** [PEP8](https://www.python.org/dev/peps/pep-0008/)
 
-**Version Management: ** [Git](https://git-scm.com/)
+**Version Management:** [Git](https://git-scm.com/)
 
 ## Autres
 
