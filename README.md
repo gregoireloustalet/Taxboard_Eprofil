@@ -29,6 +29,11 @@ L'objectif du e-profil est de créer un framework pour les legaltech, afin qu'el
 
 [Git Guide](https://rogerdudler.github.io/git-guide/)
 
+La norme de développement PEP8 est un guide de développement pour uniformiser le code écrit.
+Cependant, nous acceptons de petits écarts si ceux-ci sont justifiables (ex: une ligne de 82 caractères).
+
+Pour le respect de la norme PEP8, il est possible d'utiliser des plugins de vérification (ex: [Atom Plugin](https://atom.io/packages/linter-pycodestyle) ) ou d'utiliser des vérifications online (ex: [PEP8online](http://pep8online.com/) )
+
 ## License
 
 Ce projet est licensié sous la license MIT
