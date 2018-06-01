@@ -10,14 +10,19 @@ L'objectif du e-profil est de créer un framework pour les legaltech, afin qu'el
 ## Développement
 
 **Langage de programmation:** [Python](https://www.python.org/)
+
 **Framework Web:** 
+
 **Database:** [Couchbase](https://www.couchbase.com/)
+
 **Libraries:** 
+
 - [Bootstrap](https://getbootstrap.com/)
 
 ## Standards
 
 **Standard Code:** [PEP8](https://www.python.org/dev/peps/pep-0008/)
+
 **Version Management: ** [Git](https://git-scm.com/)
 
 ## Autres
