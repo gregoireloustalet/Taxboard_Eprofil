@@ -11,13 +11,19 @@ L'objectif du e-profil est de créer un framework pour les legaltech, afin qu'el
 
 **Langage de programmation:** [Python](https://www.python.org/)
 
-**Framework Web:** 
+**Framework Web:** [Flask](http://flask.pocoo.org/)
 
 **Database:** [Couchbase](https://www.couchbase.com/)
 
 **Libraries:** 
 
 - [Bootstrap](https://getbootstrap.com/)
+
+**Pip Librairies**
+
+- Flask
+- flask-login
+
 
 ## Standards
 
