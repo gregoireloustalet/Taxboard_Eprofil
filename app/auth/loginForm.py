@@ -1,11 +1,11 @@
 from flask_wtf import Form
 from wtforms import TextField, PasswordField
-from wtforms.validators import DataRequired, Email
+from wtforms.validators import DataRequired
 
 from app.models.session import Session
 
 class LoginForm(Form):
-	email = TextField("Email", validators=[DataRequired(), Email()])
+	email = TextField("Email", validators=[DataRequired()])
 	password = PasswordField("Password", validators=[DataRequired()])
 
 	
@@ -18,6 +18,6 @@ class LoginForm(Form):
 		if not rv:
 			return False
 		
-		self.session = Session(self.email.data, self.password.data)
+		self.session = Session()
+		self.session.fill(self.email.data, self.password.data)
 		return True
-		

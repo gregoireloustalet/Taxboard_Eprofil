@@ -12,15 +12,16 @@ class Session:
 		self.password = ""
 		
 	# Constructor with email and password 
-	def __init__(self, mail, passwd):
+	def fill(self, mail, passwd):
 		self.email = mail
 		pw = passwd.encode('utf-8')
 		self.password = bcrypt.hashpw(pw, bcrypt.gensalt()).decode('utf-8')
 		
-	
-	def validate(self, passwd):
-		return (bcrypt.hashpw(passwd, self.password).decode('utf-8') == self.password)
-		
+	# Checks if passwd is the hashed password
+	def validates(self, passwd):
+		pw = passwd.encode('utf-8')
+		spw = self.password.encode('utf-8')
+		return (bcrypt.hashpw(pw, spw).decode('utf-8') == self.password)
 		
 	# Generate Unique ID for couchbase from email hash
 	def genID(self):
@@ -36,6 +37,6 @@ class Session:
 		return str
 		
 	# Get object from JSON
-	def fromJSON(self, jsonobj):
-		self.email = jsonobj["email"]
-		self.password = jsonobj["password"]
+	def fromJSON(self, obj):
+		self.email = obj["email"]
+		self.password = obj["password"]

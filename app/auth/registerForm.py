@@ -1,9 +1,10 @@
+from flask import request, url_for, redirect
+
 from flask_wtf import Form
-from wtforms import TextField, PasswordField, BooleanField
+from wtforms import TextField, PasswordField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 from app.models.session import Session
-# from app.database.database import DB
 
 class RegisterForm(Form):
 	email = TextField("Email", validators=[DataRequired(), Email()])
@@ -23,9 +24,6 @@ class RegisterForm(Form):
 		if not rv:
 			return False
 		
-		#Check if user exist
-		
-		
-		self.session = Session(self.email.data, self.password.data)
+		self.session = Session()
+		self.session.fill(self.email.data, self.password.data)
 		return True
-		

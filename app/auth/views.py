@@ -9,15 +9,39 @@ from ..auth import auth
 from .registerForm import RegisterForm
 from .loginForm import LoginForm
 from app.database.database import DB
+from app.models.session import Session
+from app.models.user import User
 
 
+# Login
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
+	# on POST
 	if form.validate_on_submit():
-		flash('test', 'success')
+		# Try to fetch user to check if he exists, and verify password
+		db = DB()
+		doc_id = form.session.genID()
+		doc = db.fetch(doc_id)
+		if doc != None:
+			session = Session()
+			session.fromJSON(doc.value)
+			if (session.validates(form.password.data)):
+				# Create class for flask-login, and create the session
+				user = User()
+				user.fill(doc_id)
+				login_user(user)
+				flash('you were successfully logged in as ' + session.email)
+				return redirect(url_for('index'))
+			
+			#else, show error
+			else:
+				flash('Login error', 'error')
+		else:
+			flash('Login error', 'error')
 	return render_template('login.html', form=form)
 	
+# Logout
 @auth.route('/logout', methods=['GET'])
 @login_required
 def logout():
@@ -26,6 +50,7 @@ def logout():
 	return redirect(url_for('index'))
 	
 
+# Register
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
 	form = RegisterForm()
