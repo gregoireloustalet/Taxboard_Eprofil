@@ -7,17 +7,21 @@ from itsdangerous import URLSafeSerializer, BadSignature
 from ..auth import auth
 
 from .registerForm import RegisterForm
+from .loginForm import LoginForm
 from app.database.database import DB
 
 
-@auth.route('/login', methods=['GET'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-	return render_template('login.html')
+	form = LoginForm()
+	if form.validate_on_submit():
+		flash('test', 'success')
+	return render_template('login.html', form=form)
 	
 @auth.route('/logout', methods=['GET'])
-# @login_required
+@login_required
 def logout():
-	#logout_user()
+	logout_user()
 	flash('You were logged out', 'success')
 	return redirect(url_for('index'))
 	
@@ -27,9 +31,11 @@ def register():
 	form = RegisterForm()
 	if form.validate_on_submit():
 		db = DB()
-		db.create(form.user.genID(), form.user.toJSON())
-		
-		flash('User created', 'success')
-		return redirect(url_for('index'))
+		if db.exists(form.session.genID()):
+			flash('User already exists', 'error')
+		else:
+			db.insert(form.session.genID(), form.session.toJSON())
+			flash('User created', 'success')
+			return redirect(url_for('index'))
 	
 	return render_template('register.html', form=form)

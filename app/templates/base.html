@@ -1,0 +1,27 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+	{% if title %} {{ title }} {% else %} Un Titre {% endif %}
+{% endblock %}
+
+{% block navbar %}
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<ul class="nav navbar-nav">
+				<li><a href="{{ url_for('index') }}">Index</a></li>
+				<li><a href="{{ url_for('auth.login') }}">Login</a></li>
+				<li><a href="{{ url_for('auth.register') }}">Register</a></li>
+			</ul>
+		</div>
+	</nav>
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		{% for message in get_flashed_messages() %}
+		<div class="alert alert-info" role="alert">{{ message }}</div>
+		{% endfor %}
+		
+		{% block app_content %} {% endblock %}
+	</div>
+{% endblock %}

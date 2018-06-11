@@ -1,11 +1,9 @@
-{% from 'components/field.html' import render_field %}
-{% extends "layout.html" %}
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block title %}Register{% endblock %}
 
-{% block header %} {% endblock %}
-
-{% block body %}
+{% block app_content %}
 	<form method="POST" action="{{ request.url }}">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -14,10 +12,7 @@
                 </h3>
             </div>
             <div class="panel-body">
-                {{ form.csrf_token }}
-                {{ render_field(form.email) }}
-                {{ render_field(form.password) }}
-                {{ render_field(form.confirm) }}
+				{{ wtf.quick_form(form) }}
             </div>
             <div class="panel-footer">
                 <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> Submit</button>

@@ -2,8 +2,8 @@ from flask_wtf import Form
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
-from app.models.Login import Login
-from app.database.database import DB
+from app.models.session import Session
+# from app.database.database import DB
 
 class RegisterForm(Form):
 	email = TextField("Email", validators=[DataRequired(), Email()])
@@ -16,7 +16,7 @@ class RegisterForm(Form):
 	
 	def __init__(self, *args, **kwargs):
 		Form.__init__(self, *args, **kwargs)
-		self.user = None
+		self.session = None
 		
 	def validate(self):
 		rv = Form.validate(self)
@@ -26,6 +26,6 @@ class RegisterForm(Form):
 		#Check if user exist
 		
 		
-		self.user = Login(self.email.data, self.password.data)
+		self.session = Session(self.email.data, self.password.data)
 		return True
 		

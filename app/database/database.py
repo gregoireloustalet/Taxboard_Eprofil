@@ -8,9 +8,20 @@ class DB:
 		self._cluster.authenticate(self._auth)
 		self.cb = self._cluster.open_bucket('Profile')
 		
-	def create(self, id, obj):
+	def insert(self, id, obj):
 		self.cb.upsert(id, obj)
 		
-	def get_id(self, id):
-		obj = self.cb.get(id)
-		return obj
+	def fetch(self, id):
+		try:
+			obj = self.cb.get(id)
+			return obj
+		except:
+			return None
+		
+	def exists(self, id):
+		try:
+			obj = self.cb.get(id)
+			if (obj.success) :
+				return True
+		except:
+			return False
