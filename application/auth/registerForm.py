@@ -1,10 +1,8 @@
-from flask import request, url_for, redirect
-
 from flask_wtf import Form
 from wtforms import TextField, PasswordField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
-from app.models.session import Session
+from application.models.session import Session
 
 class RegisterForm(Form):
 	email = TextField("Email", validators=[DataRequired(), Email()])

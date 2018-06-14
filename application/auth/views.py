@@ -3,14 +3,13 @@ from flask import (
 )
 
 from flask_login import login_user, login_required, logout_user
-from itsdangerous import URLSafeSerializer, BadSignature
 from ..auth import auth
 
 from .registerForm import RegisterForm
 from .loginForm import LoginForm
-from app.database.database import DB
-from app.models.session import Session
-from app.models.user import User
+from application.database import get_db
+from application.models.session import Session
+from application.models.user import User
 
 
 # Login
@@ -20,7 +19,7 @@ def login():
 	# on POST
 	if form.validate_on_submit():
 		# Try to fetch user to check if he exists, and verify password
-		db = DB()
+		db = get_db()
 		doc_id = form.session.genID()
 		doc = db.fetch(doc_id)
 		if doc != None:
@@ -55,7 +54,7 @@ def logout():
 def register():
 	form = RegisterForm()
 	if form.validate_on_submit():
-		db = DB()
+		db = get_db()
 		if db.exists(form.session.genID()):
 			flash('User already exists', 'error')
 		else:
