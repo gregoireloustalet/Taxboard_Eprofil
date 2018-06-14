@@ -12,6 +12,9 @@ from application.auth import auth
 def register_blueprints(app):
 	app.register_blueprint(auth)
 
+# Mail
+from flask_mail import Mail
+	
 # Base config
 app = Flask(__name__)
 Bootstrap(app)
@@ -27,4 +30,7 @@ def load_user(id):
 	user.loaduser(id)
 	return user
 		
+# Mail 
+mail = Mail(app)
+
 import application.views
