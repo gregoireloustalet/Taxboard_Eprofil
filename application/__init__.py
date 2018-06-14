@@ -8,7 +8,7 @@ from flask_login import LoginManager
 from application.models.user import User
 
 #register all blueprints to app
-from application.auth import auth
+from application.auth_blueprint import auth
 def register_blueprints(app):
 	app.register_blueprint(auth)
 

@@ -1,7 +1,7 @@
 from flask import current_app, request, redirect, url_for, render_template, flash, abort
 
 from flask_login import login_user, login_required, logout_user
-from ..auth import auth
+from ..auth_blueprint import auth
 
 from application.forms.registerForm import RegisterForm
 from application.forms.loginForm import LoginForm
@@ -19,11 +19,6 @@ def login():
 		if doc != None:
 			user = User()
 			user.fromJSON(doc.value, form.user.getID())
-			
-			print('form name : ' + form.user.email)
-			print('form passwd : ' + form.user.password)
-			print('user name : ' + user.email)
-			print('user password : ' + user.password)
 			
 			if (user.check_password(form.user.password)):
 				login_user(user)
