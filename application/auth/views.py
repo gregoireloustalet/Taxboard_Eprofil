@@ -5,8 +5,8 @@ from flask import (
 from flask_login import login_user, login_required, logout_user
 from ..auth import auth
 
-from .registerForm import RegisterForm
-from .loginForm import LoginForm
+from application.forms.registerForm import RegisterForm
+from application.forms.loginForm import LoginForm
 from application.database import get_db
 from application.models.session import Session
 from application.models.user import User
