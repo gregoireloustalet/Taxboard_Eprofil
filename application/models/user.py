@@ -1,27 +1,77 @@
 from flask_login import UserMixin
+import bcrypt
+import hashlib
 
-# class used by the Flask-Login template. Acts as session that can be accessed from current_user
+# User class
+# Used by Flask-login
 class User(UserMixin):
-	
 	def __init__(self):
-		self.id = ""
-		self.authenticated = False
-		self.anonymous = True
+		# Fields required by Flask-Login
+		self._id = ""
+		self._authenticated = False
+		self._anonymous = True
 		
-	def fill(self, id):
-		self.id = id
-		self.authenticated = True
-		self.anonymous = False
+		# Model fields
+		self.email = ""
+		self.password = ""
 	
+	# Generate Unique ID for couchbase from email hash
+	def genID(self):
+		return "user:" + hashlib.sha1(self.email.encode('utf-8')).hexdigest()
+		
+	# getter for ID
+	def getID(self):
+		return self._id
+	
+	# fill the fields at once (used to pass user to another module/view)
+	def set(self, mail, passwd):
+		self.email = mail
+		self.password = passwd
+		self._id = self.genID()
+		
+	# Checks if the hashed password in self.password is decoded to passwd
+	def check_password(self, passwd):
+		pw = passwd.encode('utf-8')
+		spw = self.password.encode('utf-8')
+		return (bcrypt.hashpw(pw, spw).decode('utf-8') == self.password)
+		
+	# Generates a password using bcrypt
+	def gen_password(self, passwd):
+		self.password = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+	
+	
+	
+	# Next 4 methods required by Flask-Login
 	def is_active(self):
 		return True
 	
 	def get_id(self):
-		return self.id
+		return self._id
 	
 	def is_authenticated(self):
-		return self.authenticated
+		return self._authenticated
 		
 	def is_anonymous(self):
-		return self.anonymous
+		return self._anonymous
 		
+	# Method used by the user_loader
+	def loaduser(self, id):
+		self._id = id
+		self._authenticated = True
+		self._anonymous = False
+	
+	
+	# Methods to work with database
+	# Serialize object to "JSON" document
+	def toJSON(self):
+		str = {
+			'email' : self.email,
+			'password' : self.password
+		}
+		return str
+		
+	# Get object from JSON
+	def fromJSON(self, obj, id):
+		self._id = id
+		self.email = obj["email"]
+		self.password = obj["password"]

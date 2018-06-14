@@ -24,7 +24,7 @@ login = LoginManager(app)
 @login.user_loader
 def load_user(id):
 	user = User()
-	user.fill(id)
+	user.loaduser(id)
 	return user
 		
 import application.views

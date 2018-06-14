@@ -1,6 +1,4 @@
-from flask import (
-	current_app, request, redirect, url_for, render_template, flash, abort,
-)
+from flask import current_app, request, redirect, url_for, render_template, flash, abort
 
 from flask_login import login_user, login_required, logout_user
 from ..auth import auth
@@ -8,7 +6,6 @@ from ..auth import auth
 from application.forms.registerForm import RegisterForm
 from application.forms.loginForm import LoginForm
 from application.database import get_db
-from application.models.session import Session
 from application.models.user import User
 
 
@@ -16,21 +13,21 @@ from application.models.user import User
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
-	# on POST
 	if form.validate_on_submit():
-		# Try to fetch user to check if he exists, and verify password
 		db = get_db()
-		doc_id = form.session.genID()
-		doc = db.fetch(doc_id)
+		doc = db.fetch(form.user.getID())
 		if doc != None:
-			session = Session()
-			session.fromJSON(doc.value)
-			if (session.validates(form.password.data)):
-				# Create class for flask-login, and create the session
-				user = User()
-				user.fill(doc_id)
+			user = User()
+			user.fromJSON(doc.value, form.user.getID())
+			
+			print('form name : ' + form.user.email)
+			print('form passwd : ' + form.user.password)
+			print('user name : ' + user.email)
+			print('user password : ' + user.password)
+			
+			if (user.check_password(form.user.password)):
 				login_user(user)
-				flash('you were successfully logged in as ' + session.email)
+				flash('you were successfully logged in as ' + user.email)
 				return redirect(url_for('index'))
 			
 			#else, show error
@@ -55,10 +52,10 @@ def register():
 	form = RegisterForm()
 	if form.validate_on_submit():
 		db = get_db()
-		if db.exists(form.session.genID()):
+		if db.exists(form.user.getID()):
 			flash('User already exists', 'error')
 		else:
-			db.insert(form.session.genID(), form.session.toJSON())
+			db.insert(form.user.getID(), form.user.toJSON())
 			flash('User created', 'success')
 			return redirect(url_for('index'))
 	
