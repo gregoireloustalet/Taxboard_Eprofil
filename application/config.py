@@ -1,7 +1,7 @@
 # Global config
 # http://flask.pocoo.org/docs/1.0/config/
 class base_config(object):
-	INSTANCE_RELATIVE_CONFIG = True	
+	INSTANCE_RELATIVE_CONFIG = True
 	""" 
 	Defined in application.cfg :
 		SECRET_KEY
@@ -18,9 +18,8 @@ class base_config(object):
 		MAIL_PASSWORD
 		MAIL_DEFAULT_SENDER
 		MAIL_SUPPRESS_SEND
-
-	
 	"""
+
 	
 class dev_config(base_config):
 	DEVELOPMENT = True
