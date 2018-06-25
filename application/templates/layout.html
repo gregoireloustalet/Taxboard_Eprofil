@@ -1,18 +1,17 @@
 {% extends 'bootstrap/base.html' %}
 
 {% block title %}
-	{% if title %} {{ title }} {% else %} Un Titre {% endif %}
+	{% if title %} {{ title }} {% endif %}
 {% endblock %}
 
 {% block navbar %}
 	<nav class="navbar navbar-default">
 		<div class="container">
 			<ul class="nav navbar-nav">
-				{% if current_user.is_authenticated %}
 				<li><a href="{{ url_for('index') }}">Index</a></li>
+				{% if current_user.is_authenticated %}
 				<li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
 				{% else %}
-				<li><a href="{{ url_for('index') }}">Index</a></li>
 				<li><a href="{{ url_for('auth.login') }}">Login</a></li>
 				<li><a href="{{ url_for('auth.register') }}">Register</a></li>
 				{% endif %}
