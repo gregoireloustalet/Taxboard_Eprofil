@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block title %}Register{% endblock %}
@@ -11,10 +11,46 @@
 			</h3>
 		</div>
 		<div class="panel-body">
-			{{ wtf.quick_form(form) }}
+			<label class="checkbox-inline">
+				<input type="radio" name="isphysical" value="True" onclick="showf1()" checked> Physical Person
+			</label>
+			
+			<label class="checkbox-inline">
+				<input type="radio" name="isphysical" value="False" onclick="showf2()"> Legal person
+			</label>
+			
+			<div class="visible" id="form1">
+				<h4> Physical Person </h4>
+				{{ wtf.quick_form(form1) }}
+			</div>
+			<div class="hidden" id="form2">
+				<h4> Legal Person </h4>
+				{{ wtf.quick_form(form2) }}
+			</div>
 		</div>
 		<div class="panel-footer">
 			<br/>
 		</div>
 	</div>
+{% endblock %}
+
+{% block scripts %}
+	{{ super() }}
+	<script language="javascript">
+		var f2 = document.getElementById("form2");
+		
+		function showf1() {
+			var f1 = document.getElementById("form1");
+			var f2 = document.getElementById("form2");
+			f1.className = "visible";
+			f2.className = "hidden";
+		}
+		
+		function showf2() {
+			var f1 = document.getElementById("form1");
+			var f2 = document.getElementById("form2");
+			f1.className = "hidden";
+			f2.className = "visible";
+		}
+	</script>
 {% endblock %}
