@@ -1,4 +1,5 @@
 from application.models.physicalPerson import PhysicalPerson
+
 import hashlib
 
 
@@ -47,13 +48,16 @@ class Person():
 	# import object from database
 	def fromJSON(self, obj):
 		self.isPhysical = obj["isPhysical"]
+		if(obj["person"] is not None):
+			if self.isPhysical:
+				self.person = PhysicalPerson()
+				self.person.fromJSON(obj["person"])
 
-		if self.isPhysical:
-			self.person = PhysicalPerson()
-			self.person.fromJSON(obj["person"])
-
-		else:	# To rework
-			self.person = PhysicalPerson()
-			self.person.fromJSON(obj["person"])
-
+			else:
+				self.person = LegalPerson()
+				self.person.fromJSON(obj["person"])
+		else:
+			self.person = None
 		self._id = self.genID()
+
+from application.models.legalPerson import LegalPerson

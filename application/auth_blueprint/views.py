@@ -9,6 +9,7 @@ from application.models.user import User
 
 from application.forms.registerFormPhysical import RegisterFormPhysical
 from application.forms.registerFormLegal import RegisterFormLegal
+from application.forms.registerForm import RegisterForm
 
 
 # Login
@@ -51,24 +52,26 @@ def register():
 	form2 = RegisterFormLegal()
 
 	# on POST
-	if (form1.validate_on_submit()) or (form2.validate_on_submit()):
+	# If physical person
+	if ((form1.validate_on_submit()) and (form1.firstName.data != "") and (form1.lastName.data != "")):
 		db = get_db()
-		# If physical person
-		if (form1.submit.data):
-			if db.exists(form1.user.getID()):
-				flash('User already exists', 'error')
-			else:
-				db.insert(form1.user.getID(), form1.user.toJSON())
-				flash('User created', 'success')
-				return redirect(url_for('index'))
+		print("form 1")
+		if db.exists(form1.user.getID()):
+			flash('User already exists', 'error')
+		else:
+			db.insert(form1.user.getID(), form1.user.toJSON())
+			flash('User created', 'success')
+			return redirect(url_for('index'))
 
-		# if Legal person
-		if (form2.submit.data):
-			if db.exists(form2.user.getID()):
-				flash('User already exists', 'error')
-			else:
-				db.insert(form2.user.getID(), form2.user.toJSON())
-				flash('User created', 'success')
-				return redirect(url_for('index'))
+	# if Legal person
+	elif ((form2.validate_on_submit()) and (form2.name.data != "")):
+		db = get_db()
+		print("form 2")
+		if db.exists(form2.user.getID()):
+			flash('User already exists', 'error')
+		else:
+			db.insert(form2.user.getID(), form2.user.toJSON())
+			flash('User created', 'success')
+			return redirect(url_for('index'))
 
 	return render_template('register.html', form1=form1, form2=form2)
