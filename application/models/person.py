@@ -15,12 +15,12 @@ class Person():
 		return self._id
 
 	def genID(self):
-		if person is not None:
-			str = self.person.getID()[14:] + str(self.isPhysical)
-			return "Person:" + hashlib.sha1(str.encode('utf-8')).hexdigest()
+		if self.person is not None:
+			strng = self.person.getID()[14:] + str(self.isPhysical)
+			return "Person:" + hashlib.sha1(strng.encode('utf-8')).hexdigest()
 		else:
-			str = str(self.isPhysical)
-			return "Person:" + hashlib.sha1(str.encode('utf-8')).hexdigest()
+			strng = str(self.isPhysical)
+			return "Person:" + hashlib.sha1(strng.encode('utf-8')).hexdigest()
 
 	def createPhysicalPerson(self):
 		self.person = PhysicalPerson()
@@ -32,32 +32,23 @@ class Person():
 
 	# format object for database
 	def toJSON(self):
-		obj = None
-		if self.person is not None:
-			obj = {
-				"isPhysical": self.isPhysical,
-				"person": self.person.toJSON()
-			}
-		else:
-			obj = {
-				"isPhysical": self.isPhysical,
-				"person": None
-			}
+		obj = {
+			"isPhysical": self.isPhysical,
+			"person": self.person.toJSON()
+		}
 		return obj
 
 	# import object from database
 	def fromJSON(self, obj):
 		self.isPhysical = obj["isPhysical"]
-		if(obj["person"] is not None):
+		if (obj["person"] is not None):
 			if self.isPhysical:
 				self.person = PhysicalPerson()
 				self.person.fromJSON(obj["person"])
-
 			else:
 				self.person = LegalPerson()
+				print(str(obj["person"]))
 				self.person.fromJSON(obj["person"])
-		else:
-			self.person = None
 		self._id = self.genID()
 
 from application.models.legalPerson import LegalPerson

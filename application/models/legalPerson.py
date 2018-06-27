@@ -57,8 +57,9 @@ class LegalPerson():
 
 	# import object from database
 	def fromJSON(self, obj):
+		temp = obj["legalRepresentative"]
 		self.name = obj["name"]
-		self.address = obj["address"]
+		self.address.fromJSON(obj["address"])
 		self.creationDate = obj["creationDate"]
 		self.endDate = obj["endDate"]
 		self.socialObject = obj["socialObject"]
@@ -68,6 +69,8 @@ class LegalPerson():
 		self.minValue = obj["minValue"]
 		self.maxValue = obj["maxValue"]
 		self.legalRepresentative = Person()
+		if temp["person"] is not None:
+			self.legalRepresentative.fromJSON(temp)
 		self.stock = obj["stock"]
 		self.nominalValue = obj["nominalValue"]
 		self.governingBodies = []

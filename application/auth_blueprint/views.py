@@ -9,7 +9,6 @@ from application.models.user import User
 
 from application.forms.registerFormPhysical import RegisterFormPhysical
 from application.forms.registerFormLegal import RegisterFormLegal
-from application.forms.registerForm import RegisterForm
 
 
 # Login
@@ -22,7 +21,6 @@ def login():
 		if doc is not None:
 			user = User()
 			user.fromJSON(doc.value, form.user.getID())
-
 			if (user.check_password(form.user.password)):
 				login_user(user)
 				flash('you were successfully logged in as ' + user.email)

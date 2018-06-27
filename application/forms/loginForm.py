@@ -20,5 +20,7 @@ class LoginForm(Form):
 			return False
 		
 		self.user = User()
-		self.user.set(self.email.data, self.password.data)
+		self.user.email = self.email.data
+		self.user.password = self.password.data
+		self.user.setID(self.user.genID())
 		return True
