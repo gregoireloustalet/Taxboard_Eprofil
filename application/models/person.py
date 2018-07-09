@@ -1,4 +1,5 @@
 from application.models.physicalPerson import PhysicalPerson
+from application.models.legalPerson import LegalPerson
 
 import hashlib
 
@@ -47,7 +48,6 @@ class Person():
 				self.person.fromJSON(obj["person"])
 			else:
 				self.person = LegalPerson()
-				print(str(obj["person"]))
 				self.person.fromJSON(obj["person"])
 		self._id = self.genID()
 

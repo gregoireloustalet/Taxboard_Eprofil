@@ -1,6 +1,7 @@
 from flask import render_template, flash
 from flask_mail import Message
 from application import app, mail # mail for mail test
+from application.database import get_db
 
 
 @app.route('/')
@@ -34,3 +35,10 @@ def testmail():
 	mail.send(msg)
 	flash('mail sent', 'success')
 	return redirect(url_for('index'))
+
+	
+@app.route('/test')
+def test():
+	db = get_db()
+	res = db.test()
+	return str(res)

@@ -4,53 +4,83 @@
 {% block title %}Register{% endblock %}
 
 {% block app_content %}
-	 <div class="panel panel-default">
+{% for field in form.errors %}
+	{% for error in form.errors[field] %}
+	<div class="alert alert-error">
+		<strong>{{ field }}: </strong> {{error}}
+	</div>
+	{% endfor %}
+{% endfor %}
+
+<form action="{{ url_for('auth.register') }}" method="POST">
+	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">
-				Register
-			</h3>
+			<h3 class="panel-title">Register</h3>
 		</div>
 		<div class="panel-body">
-			<label class="checkbox-inline">
-				<input type="radio" name="isphysical" value="True" onclick="showf1()" checked> Physical Person
-			</label>
-			
-			<label class="checkbox-inline">
-				<input type="radio" name="isphysical" value="False" onclick="showf2()"> Legal person
-			</label>
-			
-			<div class="visible" id="form1">
-				<h4> Physical Person </h4>
-				{{ wtf.quick_form(form1) }}
+			{{ form.csrf_token }}
+			<div class="form-group required">
+				<label class="control-label" for="isPhysical">Account type</label>
+				<select class="form-control" id="isPhysical" name="isPhysical" onchange="showfields(this.value)">
+					<option value="physical">Physical person</option>
+					<option value="legal" {% if form.isPhysical.data == "legal" %}selected{% endif %}>Legal person</option>
+				</select>
 			</div>
-			<div class="hidden" id="form2">
-				<h4> Legal Person </h4>
-				{{ wtf.quick_form(form2) }}
+			<div class="form-group required">
+				<label class="control-label" for="email">Email</label>
+				<input class="form-control" type="text" id="email" name="email" value="{{form.val(form.email.data)}}" required>
+			</div>
+			<div class="form-group required">
+				<label class="control-label" for="password">Password</label>
+				<input class="form-control" type="password" id="password" name="password" value="" required>
+			</div>
+			<div class="form-group required">
+				<label class="control-label" for="confirm">Confirm Password</label>
+				<input class="form-control" type="password" id="confirm" name="confirm" value="" required>
+			</div>
+			
+			<div id="PhysicalPerson" class="{% if form.isPhysical.data == 'legal' %}hidden{% else %}visible{% endif %}">
+				<div class="form-group">
+					<label class="control-label" for="firstName">First Name</label>
+					<input class="form-control" type="text" id="firstName" name="firstName" value="{{form.val(form.firstName.data)}}">
+				</div>
+				
+				<div class="form-group">
+					<label class="control-label" for="lastName">Last Name</label>
+					<input class="form-control" type="text" id="lastName" name="lastName" value="{{form.val(form.lastName.data)}}">
+				</div>
+			</div>
+			
+			<div id="LegalPerson" class="{% if form.isPhysical.data == 'legal' %}visible{% else %}hidden{% endif %}">
+				<div class="form-group">
+					<label class="control-label" for="name">Company name</label>
+					<input class="form-control" type="text" id="name" name="name" value="{{form.val(form.name.data)}}">
+				</div>
 			</div>
 		</div>
 		<div class="panel-footer">
-			<br/>
+			<input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
 		</div>
 	</div>
+</form>
 {% endblock %}
+
 
 {% block scripts %}
 	{{ super() }}
-	<script language="javascript">
-		var f2 = document.getElementById("form2");
-		
-		function showf1() {
-			var f1 = document.getElementById("form1");
-			var f2 = document.getElementById("form2");
-			f1.className = "visible";
-			f2.className = "hidden";
-		}
-		
-		function showf2() {
-			var f1 = document.getElementById("form1");
-			var f2 = document.getElementById("form2");
-			f1.className = "hidden";
-			f2.className = "visible";
+	<script language="javascript">				
+		function showfields(val) {
+			var phys = document.getElementById("PhysicalPerson");
+			var leg = document.getElementById("LegalPerson");
+			
+			if (val == "physical") {
+				phys.className="visible";
+				leg.className="hidden";
+			}
+			else {
+				phys.className="hidden";
+				leg.className="visible";
+			}
 		}
 	</script>
 {% endblock %}

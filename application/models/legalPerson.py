@@ -16,7 +16,7 @@ class LegalPerson():
 		self.value = 0
 		self.minValue = None
 		self.maxValue = None
-		self.legalRepresentative = Person()
+		self.legalRepresentative = None #Person()
 		self.stock = 0
 		self.nominalValue = 0
 		self.governingBodies = []
@@ -46,7 +46,7 @@ class LegalPerson():
 			"value": self.value,
 			"minValue": self.minValue,
 			"maxValue": self.maxValue,
-			"legalRepresentative": self.legalRepresentative.toJSON(),
+			"legalRepresentative": None, #self.legalRepresentative.toJSON(),
 			"stock": self.stock,
 			"nominalValue": self.nominalValue,
 			"governingBodies": self.governingBodies,
@@ -68,9 +68,9 @@ class LegalPerson():
 		self.value = obj["value"]
 		self.minValue = obj["minValue"]
 		self.maxValue = obj["maxValue"]
-		self.legalRepresentative = Person()
-		if temp["person"] is not None:
-			self.legalRepresentative.fromJSON(temp)
+		self.legalRepresentative = None #Person()
+		#if temp["person"] is not None:
+		#	self.legalRepresentative.fromJSON(temp)
 		self.stock = obj["stock"]
 		self.nominalValue = obj["nominalValue"]
 		self.governingBodies = []
@@ -78,4 +78,4 @@ class LegalPerson():
 		self.accountAuditor = obj["accountAuditor"]
 		self._id = self.genID()
 
-from application.models.person import Person
+# from application.models.person import Person

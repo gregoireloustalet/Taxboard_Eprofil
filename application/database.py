@@ -1,4 +1,5 @@
 from couchbase.cluster import Cluster, PasswordAuthenticator
+from couchbase.n1ql import N1QLQuery
 from flask import current_app as app, g
 
 
@@ -29,7 +30,6 @@ class DB:
 			return True
 		else:
 			return False
-
 
 # Stocks a DB object into flask_g, to use the same connection to last until the end of a request
 def get_db():

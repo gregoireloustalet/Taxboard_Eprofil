@@ -1,3 +1,5 @@
 Flask
 Flask-Login
 Flask-WTF
+Flask-bcrypt
+couchbase

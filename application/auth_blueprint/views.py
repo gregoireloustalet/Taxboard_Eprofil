@@ -6,9 +6,7 @@ from ..auth_blueprint import auth
 from application.forms.loginForm import LoginForm
 from application.database import get_db
 from application.models.user import User
-
-from application.forms.registerFormPhysical import RegisterFormPhysical
-from application.forms.registerFormLegal import RegisterFormLegal
+from application.forms.registerForm import RegisterForm
 
 
 # Login
@@ -16,12 +14,14 @@ from application.forms.registerFormLegal import RegisterFormLegal
 def login():
 	form = LoginForm()
 	if form.validate_on_submit():
+		user = User()
+		user.email = form.email.data
+		user.set_id(user.genID())
 		db = get_db()
-		doc = db.fetch(form.user.getID())
+		doc = db.fetch(user.get_id())
 		if doc is not None:
-			user = User()
-			user.fromJSON(doc.value, form.user.getID())
-			if (user.check_password(form.user.password)):
+			user.fromJSON(doc.value)
+			if (user.check_password(user.password, form.password.data)):
 				login_user(user)
 				flash('you were successfully logged in as ' + user.email)
 				return redirect(url_for('index'))
@@ -41,35 +41,29 @@ def logout():
 	logout_user()
 	flash('You were logged out', 'success')
 	return redirect(url_for('index'))
-
-
-# Register
+	
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
-	form1 = RegisterFormPhysical()
-	form2 = RegisterFormLegal()
-
-	# on POST
-	# If physical person
-	if ((form1.validate_on_submit()) and (form1.firstName.data != "") and (form1.lastName.data != "")):
+	form = RegisterForm()
+	if form.validate_on_submit():
 		db = get_db()
-		print("form 1")
-		if db.exists(form1.user.getID()):
-			flash('User already exists', 'error')
+		user = User()
+		user.email = form.email.data
+		user.set_bcrypt(form.password.data)
+		user.set_id(user.genID())
+		if db.exists(user.get_id()):
+			flash('Email adress already exists in our database')
 		else:
-			db.insert(form1.user.getID(), form1.user.toJSON())
+			if form.isPhysical.data == "physical":
+				user.identity.createPhysicalPerson()
+				user.identity.person.firstName = form.firstName.data
+				user.identity.person.lastName = form.lastName.data
+			else:
+				user.identity.createLegalPerson()
+				user.identity.person.name = form.name.data
+			
+			db.insert(user.get_id(), user.toJSON())
 			flash('User created', 'success')
 			return redirect(url_for('index'))
-
-	# if Legal person
-	elif ((form2.validate_on_submit()) and (form2.name.data != "")):
-		db = get_db()
-		print("form 2")
-		if db.exists(form2.user.getID()):
-			flash('User already exists', 'error')
-		else:
-			db.insert(form2.user.getID(), form2.user.toJSON())
-			flash('User created', 'success')
-			return redirect(url_for('index'))
-
-	return render_template('register.html', form1=form1, form2=form2)
+		
+	return render_template('register.html', form=form)

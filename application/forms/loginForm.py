@@ -12,15 +12,10 @@ class LoginForm(Form):
 	
 	def __init__(self, *args, **kwargs):
 		Form.__init__(self, *args, **kwargs)
-		self.user = None
 		
 	def validate(self):
 		rv = Form.validate(self)
 		if not rv:
 			return False
 		
-		self.user = User()
-		self.user.email = self.email.data
-		self.user.password = self.password.data
-		self.user.setID(self.user.genID())
 		return True
